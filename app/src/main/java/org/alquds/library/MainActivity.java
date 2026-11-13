@@ -68,17 +68,13 @@ public final class MainActivity extends Activity {
     private Button button(String label) {
         Button view = new Button(this);
         view.setText(label);
+        UiIcons.apply(view,UiIcons.label(label));
         view.setTextColor(foreground);
         view.setMinHeight(dp(48));
         view.setAllCaps(false);
         view.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         view.setPadding(dp(16), dp(12), dp(16), dp(12));
-        GradientDrawable shape = new GradientDrawable();
-        shape.setColor(surface);
-        shape.setCornerRadius(dp(16));
-        shape.setStroke(dp(1), outline);
-        view.setBackground(new RippleDrawable(ColorStateList.valueOf(
-                Color.parseColor(dark ? "#335A8278" : "#22618778")), shape, null));
+        view.setBackground(new AndalusianFrame(dark,getResources().getDisplayMetrics().density));
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(-1, -2);
         layout.setMargins(0, dp(4), 0, dp(8));
         view.setLayoutParams(layout);
@@ -243,7 +239,7 @@ public final class MainActivity extends Activity {
         boolean favorite = book.favorite;
         ContextThemeWrapper dialogTheme = new ContextThemeWrapper(this, dark
                 ? android.R.style.Theme_Material_Dialog_Alert : android.R.style.Theme_Material_Light_Dialog_Alert);
-        new AlertDialog.Builder(dialogTheme).setTitle(book.title)
+        new AndalusianDialog(dialogTheme).setTitle(book.title)
                 .setIcon(book.favorite ? R.drawable.ic_favorite : R.drawable.ic_books)
                 .setMessage(book.author + "\n" + book.category + "\n\n" + book.description
                         + "\n\nالإتاحة: بيانات وصفية فقط، لا يوجد ملف للقراءة.")

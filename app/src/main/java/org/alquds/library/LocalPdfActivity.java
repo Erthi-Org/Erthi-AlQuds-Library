@@ -63,9 +63,13 @@ public final class LocalPdfActivity extends Activity {
 
     private Button button(String label, Runnable action) {
         Button button = new Button(this);
-        button.setText(label); button.setAllCaps(false); button.setMinHeight(dp(48));
+        button.setText(label); button.setAllCaps(false); button.setMinHeight(dp(52));
+        button.setTextColor(ink); button.setPadding(dp(16),dp(10),dp(16),dp(10));
+        UiIcons.apply(button,UiIcons.label(label));
+        button.setBackground(new AndalusianFrame(dark,getResources().getDisplayMetrics().density));
         button.setOnClickListener(view -> { if (!busy) action.run(); });
-        content.addView(button, new LinearLayout.LayoutParams(-1, -2));
+        LinearLayout.LayoutParams layout=new LinearLayout.LayoutParams(-1,-2);
+        layout.setMargins(0,dp(4),0,dp(5));content.addView(button,layout);
         return button;
     }
 
@@ -76,6 +80,7 @@ public final class LocalPdfActivity extends Activity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL); root.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         root.setBackgroundColor(background);
+        root.setPadding(dp(16),dp(12),dp(16),dp(12));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
             if (android.os.Build.VERSION.SDK_INT >= 30) {
                 android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.ime());
@@ -101,7 +106,7 @@ public final class LocalPdfActivity extends Activity {
         int request = ++generation;
         documentId = null; busy = false;
         screen("كتبي على هذا الجهاز");
-        button("الرجوع إلى الفهرس", this::finish);
+        button("الرجوع إلى المكتبة", this::finish);
         content.addView(text("اختر ملف PDF تملكه أو يحق لك استخدامه. يُحفظ على هذا الجهاز فقط، دون رفعه إلى خادم. الحد 64 ميبيبايت للملف و512 ميبيبايت للمكتبة المحلية.", 15));
         button("إضافة ملف PDF من الهاتف", () -> {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("application/pdf")
@@ -118,7 +123,7 @@ public final class LocalPdfActivity extends Activity {
                     status.setText(message.isEmpty() ? documents.isEmpty() ? "لم تضف كتبًا بعد." : "الكتب المحلية: " + documents.size() : message);
                     for (LocalPdfStore.Document document : documents) {
                         button(document.title + " — " + document.pages + " صفحة", () -> open(document.id, -1));
-                        button("حذف النسخة المحلية: " + document.title, () -> new AlertDialog.Builder(this)
+                        button("حذف النسخة المحلية: " + document.title, () -> new AndalusianDialog(this)
                                 .setTitle("حذف النسخة المحلية؟")
                                 .setMessage("سيُحذف الملف وموضع القراءة من التطبيق. يبقى ملفك الأصلي لدى مصدره.")
                                 .setNegativeButton("إلغاء", null)
@@ -221,7 +226,7 @@ public final class LocalPdfActivity extends Activity {
         input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         input.setHint("من 1 إلى " + pages);
         input.setContentDescription("رقم الصفحة");
-        new AlertDialog.Builder(this).setTitle("انتقل إلى صفحة").setView(input)
+        new AndalusianDialog(this).setTitle("انتقل إلى صفحة").setView(input)
                 .setNegativeButton("إلغاء", null).setPositiveButton("انتقال", (dialog, which) -> {
                     try {
                         int target = Integer.parseInt(input.getText().toString());

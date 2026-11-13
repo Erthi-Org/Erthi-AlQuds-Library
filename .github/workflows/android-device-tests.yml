@@ -48,12 +48,16 @@ jobs:
             adb shell rm -f /data/local/tmp/alquds-stage11-light.png /data/local/tmp/alquds-stage11-dark.png
             adb shell rm -f /data/local/tmp/alquds-local-pdf-page.png
             adb shell rm -f /data/local/tmp/alquds-restored-home.png
+            adb shell rm -f /data/local/tmp/alquds-polished-favorites.png /data/local/tmp/alquds-polished-sources.png /data/local/tmp/alquds-polished-discover.png
             gradle --no-daemon connectedDebugAndroidTest
             mkdir -p visual-review
             adb pull /data/local/tmp/alquds-stage11-light.png visual-review/stage11-light.png
             adb pull /data/local/tmp/alquds-stage11-dark.png visual-review/stage11-dark.png
             adb pull /data/local/tmp/alquds-local-pdf-page.png visual-review/local-pdf-page.png
             adb pull /data/local/tmp/alquds-restored-home.png visual-review/restored-home.png
+            adb pull /data/local/tmp/alquds-polished-favorites.png visual-review/polished-favorites.png
+            adb pull /data/local/tmp/alquds-polished-sources.png visual-review/polished-sources.png
+            adb pull /data/local/tmp/alquds-polished-discover.png visual-review/polished-discover.png
             python3 tests/run_process_restart.py
       - name: Upload visual review
         uses: actions/upload-artifact@v4

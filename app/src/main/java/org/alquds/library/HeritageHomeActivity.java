@@ -69,7 +69,7 @@ public class HeritageHomeActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (libraryView != null && libraryView.goBack()) return;
-        super.onBackPressed();
+        confirmExit();
     }
 
     @Override
@@ -78,18 +78,26 @@ public class HeritageHomeActivity extends Activity {
         super.onDestroy();
     }
 
+    private void confirmExit(){
+        new AndalusianDialog(this).setTitle("هل تريد الخروج؟")
+                .setMessage("ستبقى كتبك والمفضلة ومواضع القراءة محفوظة.")
+                .setPositiveButton("خروج",(dialog,which)->finishAndRemoveTask())
+                .setNegativeButton("إلغاء",null).show();
+    }
+
     private void showHomeMenu(){
-        String[] labels={"كتبي وقراءة PDF","الفهرس المحلي","المصادر","عن إرثي"};
-        new AlertDialog.Builder(this).setTitle("مكتبة القدس الجديدة").setItems(labels,(dialog,index)->{
+        String[] labels={"كتبي وقراءة PDF","الفهرس المحلي","المصادر","عن إرثي","الخروج من التطبيق"};
+        new AndalusianDialog(this).setTitle("مكتبة القدس الجديدة").setItems(labels,(dialog,index)->{
             if(index==0) startActivity(new Intent(this,LocalPdfActivity.class));
             else if(index==1) startActivity(new Intent(this,MainActivity.class));
             else if(index==2){libraryView.screen=Screen.SOURCES;libraryView.invalidate();}
-            else new AlertDialog.Builder(this).setTitle("إرثي").setMessage("علمٌ نافع، وأثرٌ باقٍ\nمكتبة القدس الجديدة").setPositiveButton("الموقع",(d,w)->openUrl("https://erthi.org")).setNegativeButton("إغلاق",null).show();
+            else if(index==4) confirmExit();
+            else new AndalusianDialog(this).setTitle("إرثي").setMessage("علمٌ نافع، وأثرٌ باقٍ\nمكتبة القدس الجديدة").setPositiveButton("الموقع",(d,w)->openUrl("https://erthi.org")).setNegativeButton("إغلاق",null).show();
         }).setNegativeButton("إغلاق",null).show();
     }
 
     private void showLibraryMenu(){
-        new AlertDialog.Builder(this).setTitle("المكتبة").setItems(new String[]{"كتبي وقراءة PDF","الفهرس المحلي","البحث في المصادر"},(dialog,index)->{
+        new AndalusianDialog(this).setTitle("المكتبة").setItems(new String[]{"كتبي وقراءة PDF","الفهرس المحلي","البحث في المصادر"},(dialog,index)->{
             if(index==0) startActivity(new Intent(this,LocalPdfActivity.class));
             else if(index==1) startActivity(new Intent(this,MainActivity.class));
             else showSearchDialog();
@@ -104,7 +112,7 @@ public class HeritageHomeActivity extends Activity {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setGravity(Gravity.RIGHT);
         input.setPadding(36, 18, 36, 18);
-        new AlertDialog.Builder(this)
+        new AndalusianDialog(this)
                 .setTitle("بحث مكتبة القدس الجديدة")
                 .setView(input)
                 .setPositiveButton("بحث", (dialog, which) -> {
@@ -124,7 +132,7 @@ public class HeritageHomeActivity extends Activity {
         final String[] surahs = {
                 "الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"
         };
-        new AlertDialog.Builder(this)
+        new AndalusianDialog(this)
                 .setTitle("اختر السورة — " + reciter.name)
                 .setItems(surahs, (dialog, which) -> {
                     if (libraryView != null) libraryView.playRecitation(reciter, which + 1, surahs[which]);
@@ -164,6 +172,9 @@ public class HeritageHomeActivity extends Activity {
     private final class LibraryView extends View {
 
         private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final UiIcons uiIcons = new UiIcons(HeritageHomeActivity.this);
+        private final List<TextLabel> textLabels = new ArrayList<>();
+        private String accessibilityTitle = "مكتبة القدس الجديدة";
         private final Paint stroke = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final List<Hit> hits = new ArrayList<>();
         private final float tapSlop = ViewConfiguration.get(HeritageHomeActivity.this).getScaledTouchSlop();
@@ -262,6 +273,7 @@ public class HeritageHomeActivity extends Activity {
         protected void onDraw(Canvas c) {
             super.onDraw(c);
             hits.clear();
+            textLabels.clear();
             c.drawColor(bg);
             drawAndalusianCorners(c);
             switch (screen) {
@@ -283,6 +295,13 @@ public class HeritageHomeActivity extends Activity {
                 case QURAN: drawQuran(c); break;
             }
             if (screen != Screen.DETAIL && screen != Screen.PREVIEW && screen != Screen.FILTER) drawBottomNav(c);
+            if(screen==Screen.HOME && homeContentHeight>contentBottom()-dp(62)){
+                float viewport=contentBottom()-dp(62), track=viewport-dp(24);
+                float thumb=Math.max(dp(28),track*viewport/homeContentHeight);
+                float top=dp(12)+(track-thumb)*homeScroll/Math.max(1,homeContentHeight-viewport);
+                p.setColor(Color.argb(170,218,169,82));c.drawRoundRect(new RectF(dp(3),top,dp(6),top+thumb),dp(2),dp(2),p);
+            }
+            setContentDescription(accessibilityTitle+"، افتح القائمة للوصول إلى كتبك والفهرس");
         }
 
         private float contentTop() { return Math.max(topInset, dp(8)) + dp(8); }
@@ -290,40 +309,38 @@ public class HeritageHomeActivity extends Activity {
 
         private void drawHome(Canvas c) {
             float w = getWidth(), y = contentTop();
+            accessibilityTitle="مكتبة القدس الجديدة";
             drawHeader(c, "مكتبة", "القدس الجديدة");
             y += dp(62);
-            RectF search = new RectF(dp(18), y, w - dp(18), y + dp(50));
-            rounded(c, search, panel, line, 14);
-            text(c, "ابحث عن كتاب، مؤلف، موضوع...", search.right - dp(50), y + dp(31), dp(15), muted, Paint.Align.RIGHT, false);
-            text(c, "⌕", search.left + dp(25), y + dp(33), dp(25), green, Paint.Align.CENTER, true);
-            hits.add(new Hit(search, () -> showSearchDialog()));
-            y += dp(64);
-
             RectF hero = new RectF(dp(18), y, w - dp(18), y + dp(112));
             rounded(c, hero, Color.rgb(4, 31, 34), gold, 16);
-            drawArabesqueStar(c, hero.left + dp(34), hero.centerY(), dp(16));
+            uiIcons.draw(c,R.drawable.ic_ui_quran,hero.left+dp(42),hero.centerY(),dp(58));
             text(c, "القرآن المجوّد", hero.right - dp(18), hero.top + dp(34), dp(20), goldSoft, Paint.Align.RIGHT, true);
             text(c, "تلاوات كبار قرّاء مصر • اختيار السورة والاستماع", hero.right - dp(18), hero.top + dp(61), dp(11.5f), Color.WHITE, Paint.Align.RIGHT, false);
             RectF listen = new RectF(hero.right - dp(126), hero.bottom - dp(38), hero.right - dp(14), hero.bottom - dp(10));
             rounded(c, listen, Color.rgb(36, 25, 8), gold, 10);
             text(c, "استمع الآن", listen.centerX(), listen.centerY()+dp(4), dp(11), goldSoft, Paint.Align.CENTER, true);
-            hits.add(new Hit(hero, () -> { screen = Screen.QURAN; fetchEgyptianRecitersAsync(); invalidate(); }));
+            hits.add(new Hit(hero, "القرآن المجود", () -> { screen = Screen.QURAN; fetchEgyptianRecitersAsync(); invalidate(); }));
             y += dp(128);
 
             sectionTitle(c, "الأقسام الرئيسية", y);
             y += dp(32);
-            String[] cats = {"التاريخ", "الفقه وأصوله", "الحديث وعلومه", "القرآن وعلومه", "الجغرافيا والرحلات", "العلوم والفنون", "اللغة والأدب", "السيرة والتراجم"};
-            float gap = dp(8), side = dp(18), cellW = (w - side*2 - gap*3)/4f, cellH = dp(68);
+            String[] cats = {"القرآن وعلومه", "الحديث وعلومه", "الفقه وأصوله", "السيرة والتراجم", "اللغة والأدب", "التاريخ", "العلوم والفنون", "الجغرافيا والرحلات"};
+            float gap = dp(10), side = dp(18), cellW = (w - side*2 - gap)/2f, cellH = dp(72);
             for (int i=0;i<8;i++) {
-                int row=i/4, col=3-(i%4);
+                int row=i/2, col=1-(i%2);
                 float l = side + col*(cellW+gap), t=y+row*(cellH+gap);
                 RectF r = new RectF(l,t,l+cellW,t+cellH);
                 rounded(c,r,Color.rgb(4,16,24),Color.rgb(58,88,50),12);
-                text(c, iconFor(i), r.centerX(), r.top+dp(27), dp(21), blue, Paint.Align.CENTER, true);
-                drawCategoryLabel(c,cats[i],r,cellW);
+                uiIcons.draw(c,UiIcons.category(cats[i]),r.right-dp(30),r.centerY(),dp(40));
+                String[] lines=cats[i].split(" ",2);
+                for(int lineIndex=0;lineIndex<lines.length;lineIndex++){
+                    float baseline=lines.length==1?r.centerY()+dp(5):r.centerY()-dp(3)+lineIndex*dp(17);
+                    text(c,lines[lineIndex],r.centerX()-dp(19),baseline,fitTextSizePx(lines[lineIndex],cellW-dp(64),11.5f,10f,true),Color.WHITE,Paint.Align.CENTER,true);
+                }
                 final String categoryQuery = queryForCategory(cats[i]);
                 final String categoryName = cats[i];
-                hits.add(new Hit(r, () -> {
+                hits.add(new Hit(r, categoryName, () -> {
                     searchQuery = categoryQuery;
                     activeCategory = categoryName;
                     screen = Screen.RESULTS;
@@ -331,7 +348,7 @@ public class HeritageHomeActivity extends Activity {
                     fetchUnifiedSources(categoryQuery);
                 }));
             }
-            y += cellH*2+gap+dp(24);
+            y += cellH*4+gap*3+dp(24);
             sectionTitle(c, "نوادر المكتبة", y);
             RectF allRare=new RectF(dp(12),y-dp(20),dp(92),y+dp(12));
             rounded(c,allRare,Color.rgb(22,18,5),gold,9);
@@ -493,7 +510,7 @@ public class HeritageHomeActivity extends Activity {
             y+=dp(64);
             RectF filterHit = new RectF(dp(12), y-dp(24), dp(86), y+dp(12));
             rounded(c,filterHit,Color.rgb(5,28,34),blue,10);
-            text(c,"تصفية  ▽",filterHit.centerX(),y,dp(10.5f),Color.WHITE,Paint.Align.CENTER,true);
+            text(c,"تصفية",filterHit.centerX(),y,dp(10.5f),Color.WHITE,Paint.Align.CENTER,true);
             hits.add(new Hit(filterHit,()->{screen=Screen.FILTER;invalidate();}));
 
             if (loading) {
@@ -568,7 +585,7 @@ public class HeritageHomeActivity extends Activity {
             boolean currentFav = isFavorite(favoriteRecord);
             RectF favHit = new RectF(w-dp(62), contentTop(), w-dp(8), contentTop()+dp(56));
             text(c,currentFav?"♥":"♡",favHit.centerX(),contentTop()+dp(36),dp(27),currentFav?green:Color.WHITE,Paint.Align.CENTER,true);
-            hits.add(new Hit(favHit,()->{
+            hits.add(new Hit(favHit,currentFav?"إزالة من المفضلة":"إضافة إلى المفضلة",()->{
                 boolean now=toggleFavorite(favoriteRecord);
                 invalidate();
                 Toast.makeText(HeritageHomeActivity.this, now?"تمت الإضافة إلى المفضلة":"تمت الإزالة من المفضلة", Toast.LENGTH_SHORT).show();
@@ -700,7 +717,7 @@ public class HeritageHomeActivity extends Activity {
                 rounded(c,r,panel,accents[i],14);
                 RectF icon=new RectF(r.left+dp(10),r.top+dp(9),r.left+dp(58),r.bottom-dp(9));
                 rounded(c,icon,Color.rgb(7,24,34),accents[i],12);
-                text(c,i==0?"☾":i==1?"◎":i==2?"✦":i==3?"▣":"⌂",icon.centerX(),icon.centerY()+dp(7),dp(22),accents[i],Paint.Align.CENTER,true);
+                uiIcons.draw(c,new int[]{R.drawable.ic_ui_quran,R.drawable.ic_ui_sources,R.drawable.ic_ui_history,R.drawable.ic_books,R.drawable.ic_ui_home}[i],icon.centerX(),icon.centerY(),dp(30));
                 RectF open=new RectF(r.right-dp(82),r.bottom-dp(31),r.right-dp(10),r.bottom-dp(7));
                 rounded(c,open,Color.rgb(8,28,24),accents[i],9);
                 text(c,"فتح",open.centerX(),open.centerY()+dp(4),dp(10.5f),Color.WHITE,Paint.Align.CENTER,true);
@@ -729,8 +746,8 @@ public class HeritageHomeActivity extends Activity {
             p.setShadowLayer(dp(18),0,0,Color.argb(140,124,255,0));
             p.setColor(Color.rgb(5,33,20)); c.drawCircle(cx,cy,dp(37),p); p.clearShadowLayer();
             stroke.setColor(green); c.drawCircle(cx,cy,dp(37),stroke);
-            text(c,"القدس",cx,cy+dp(3),dp(12),gold,Paint.Align.CENTER,true);
-            text(c,"تراث",cx,cy+dp(18),dp(9),Color.WHITE,Paint.Align.CENTER,false);
+            uiIcons.draw(c,R.drawable.ic_ui_compass,cx,cy-dp(7),dp(35));
+            text(c,"القدس",cx,cy+dp(23),dp(11),gold,Paint.Align.CENTER,true);
 
             String[] nodeNames={"الحديث","التاريخ","الطب","الجغرافيا","الأدب","الفقه"};
             String[] nodeQueries={"حديث مخطوطات عربية","تاريخ إسلامي مخطوطات","طب عربي مخطوطات ابن سينا","جغرافيا رحلات الإدريسي","أدب عربي قديم","فقه أصول الفقه مخطوطات"};
@@ -738,9 +755,10 @@ public class HeritageHomeActivity extends Activity {
                 double a=(-Math.PI/2)+(Math.PI*2*i/nodeNames.length);
                 float nx=cx+(float)Math.cos(a)*orbit, ny=cy+(float)Math.sin(a)*orbit;
                 stroke.setColor(Color.argb(95,124,255,0)); c.drawLine(cx,cy,nx,ny,stroke);
-                RectF nr=new RectF(nx-dp(31),ny-dp(20),nx+dp(31),ny+dp(20));
+                RectF nr=new RectF(nx-dp(33),ny-dp(26),nx+dp(33),ny+dp(26));
                 rounded(c,nr,Color.rgb(4,18,27),i%2==0?blue:green,20);
-                text(c,nodeNames[i],nx,ny+dp(4),dp(10),Color.WHITE,Paint.Align.CENTER,true);
+                uiIcons.draw(c,new int[]{R.drawable.ic_ui_hadith,R.drawable.ic_ui_history,R.drawable.ic_ui_science,R.drawable.ic_ui_geography,R.drawable.ic_ui_language,R.drawable.ic_ui_law}[i],nx,ny-dp(7),dp(25));
+                text(c,nodeNames[i],nx,ny+dp(18),dp(9.5f),Color.WHITE,Paint.Align.CENTER,true);
                 final String q=nodeQueries[i], cat=nodeNames[i];
                 hits.add(new Hit(nr,()->{searchQuery=q;activeCategory=cat;screen=Screen.RESULTS;resultsPage=0;fetchUnifiedSources(q);}));
             }
@@ -1310,7 +1328,7 @@ public class HeritageHomeActivity extends Activity {
         }
 
         private void dispose(){
-            released=true; releasePlayer();
+            released=true; releasePlayer(); uiIcons.close();
             synchronized(imageCache){for(Bitmap bitmap:imageCache.values()) if(!bitmap.isRecycled()) bitmap.recycle();imageCache.clear();}
             if(logo!=null && !logo.isRecycled()) logo.recycle();
         }
@@ -1319,17 +1337,18 @@ public class HeritageHomeActivity extends Activity {
             float y=contentTop()+dp(24);
             RectF menu=new RectF(dp(8),contentTop(),dp(52),contentTop()+dp(44));
             rounded(c,menu,Color.rgb(28,20,6),gold,12);
-            text(c,"☰",menu.centerX(),menu.centerY()+dp(7),dp(22),Color.WHITE,Paint.Align.CENTER,true);
-            hits.add(new Hit(menu,()->showHomeMenu()));
+            uiIcons.draw(c,R.drawable.ic_ui_menu,menu.centerX(),menu.centerY(),dp(30));
+            hits.add(new Hit(menu,"القائمة",()->showHomeMenu()));
             text(c,"مكتبة القدس الجديدة",getWidth()-dp(18),y,dp(20),goldSoft,Paint.Align.RIGHT,true);
             text(c,"الكتب والمخطوطات القديمة والنادرة",getWidth()-dp(18),y+dp(24),dp(10.5f),Color.rgb(194,166,112),Paint.Align.RIGHT,false);
         }
 
         private void drawPageTitle(Canvas c,String title,boolean back){
             float y=contentTop()+dp(26);
+            accessibilityTitle=title.isEmpty()?"تفاصيل الكتاب":title;
             if(back){
                 text(c,"‹",dp(26),y+dp(4),dp(34),Color.WHITE,Paint.Align.CENTER,false);
-                hits.add(new Hit(new RectF(0,contentTop(),dp(58),contentTop()+dp(58)),()->goBack()));
+                hits.add(new Hit(new RectF(0,contentTop(),dp(58),contentTop()+dp(58)),"رجوع",()->goBack()));
             }
             if(!title.isEmpty()) text(c,title,getWidth()/2f,y,dp(21),Color.WHITE,Paint.Align.CENTER,true);
         }
@@ -1339,21 +1358,22 @@ public class HeritageHomeActivity extends Activity {
             p.setColor(Color.rgb(2,11,18)); c.drawRect(0,y,w,contentBottom()+dp(8),p);
             stroke.setColor(line); c.drawLine(0,y,w,y,stroke);
             String[] labs={"الرئيسية","المكتبة","المفضلة","المصادر","المرصد"};
-            String[] icons={"⌂","▤","♡","▥","✦"};
+            int[] icons={R.drawable.ic_ui_home,R.drawable.ic_books,R.drawable.ic_favorite,R.drawable.ic_ui_sources,R.drawable.ic_ui_compass};
             Screen[] screens={Screen.HOME,Screen.RESULTS,Screen.FAVORITES,Screen.SOURCES,Screen.DISCOVER};
             for(int i=0;i<5;i++){
                 float cx=w-(i+0.5f)*w/5f;
                 boolean active=(screen==screens[i]) || (screen==Screen.DETAIL&&i==1);
                 int col=active?goldSoft:Color.rgb(185,194,200);
-                text(c,icons[i],cx,y+dp(25),dp(20),col,Paint.Align.CENTER,true);
+                if(active){RectF selected=new RectF(cx-dp(24),y+dp(4),cx+dp(24),y+dp(37));rounded(c,selected,Color.rgb(16,43,46),gold,9);}
+                uiIcons.draw(c,icons[i],cx,y+dp(21),dp(28));
                 text(c,labs[i],cx,y+dp(47),dp(9.5f),col,Paint.Align.CENTER,false);
                 final Screen s=screens[i];
-                hits.add(new Hit(new RectF(cx-w/10f,y,cx+w/10f,contentBottom()),()->{if(s==Screen.RESULTS){showLibraryMenu();}else{screen=s;invalidate();}}));
+                hits.add(new Hit(new RectF(cx-w/10f,y,cx+w/10f,contentBottom()),labs[i],()->{if(s==Screen.RESULTS){showLibraryMenu();}else{screen=s;invalidate();}}));
             }
         }
 
         private void drawAndalusianCorners(Canvas c){
-            stroke.setStrokeWidth(dp(1)); stroke.setColor(Color.argb(120,0,168,255));
+            stroke.setStrokeWidth(dp(1)); stroke.setColor(Color.argb(120,218,169,82));
             float s=dp(42);
             for(int corner=0;corner<4;corner++){
                 float ox=(corner%2==0)?dp(8):getWidth()-dp(8);
@@ -1394,11 +1414,9 @@ public class HeritageHomeActivity extends Activity {
         }
 
         private void sectionTitle(Canvas c,String s,float y){text(c,s,getWidth()-dp(18),y,dp(17),goldSoft,Paint.Align.RIGHT,true);}
-        private String iconFor(int i){String[] a={"▦","♙","◎","▥","✎","◉","▤","♧"};return a[i%a.length];}
 
         private void rounded(Canvas c,RectF r,int fill,int border,float radiusDp){
-            p.setStyle(Paint.Style.FILL); p.setColor(fill); c.drawRoundRect(r,dp(radiusDp),dp(radiusDp),p);
-            stroke.setColor(border); stroke.setStrokeWidth(dp(1)); c.drawRoundRect(r,dp(radiusDp),dp(radiusDp),stroke);
+            AndalusianFrame.draw(c,r,fill,border,dp(radiusDp),getResources().getDisplayMetrics().density);
         }
         private void neonButton(Canvas c,RectF r,String label){
             int accent=green, fill=Color.rgb(5,33,20);
@@ -1409,7 +1427,14 @@ public class HeritageHomeActivity extends Activity {
             text(c,label,r.centerX(),r.centerY()+dp(5),dp(13),Color.WHITE,Paint.Align.CENTER,true);
         }
         private void text(Canvas c,String s,float x,float y,float size,int color,Paint.Align align,boolean bold){
-            p.setStyle(Paint.Style.FILL); p.setColor(color); p.setTextSize(size); p.setTextAlign(align); p.setTypeface(bold?android.graphics.Typeface.DEFAULT_BOLD:android.graphics.Typeface.DEFAULT); c.drawText(s,x,y,p);
+            int resource=UiIcons.glyph(s);
+            if(resource!=0){uiIcons.draw(c,resource,x,y-size*.25f,Math.max(dp(22),size));return;}
+            p.setStyle(Paint.Style.FILL); p.setColor(color); p.setTextSize(size); p.setTextAlign(align); p.setTypeface(bold?android.graphics.Typeface.DEFAULT_BOLD:android.graphics.Typeface.DEFAULT);
+            if(align==Paint.Align.CENTER && UiIcons.inline(s)){
+                float width=p.measureText(s);uiIcons.draw(c,UiIcons.label(s),x-width/2-dp(8),y-size*.25f,dp(20));x+=dp(12);
+            }
+            c.drawText(s,x,y,p);
+            textLabels.add(new TextLabel(s,x,y));
         }
         private float fitTextSizePx(String value,float maxWidth,float preferredDp,float minDp,boolean bold){
             p.setTypeface(bold?android.graphics.Typeface.DEFAULT_BOLD:android.graphics.Typeface.DEFAULT);
@@ -1523,6 +1548,67 @@ public class HeritageHomeActivity extends Activity {
             return (float)Math.sqrt(dx*dx+dy*dy);
         }
 
-        final class Hit { final RectF r; final Runnable action; Hit(RectF r,Runnable action){this.r=new RectF(r);this.action=action;} }
+        final class TextLabel {
+            final String value; final float x,y;
+            TextLabel(String value,float x,float y){this.value=value;this.x=x;this.y=y;}
+        }
+        private String describeHit(RectF bounds){
+            for(int i=textLabels.size()-1;i>=0;i--){
+                TextLabel label=textLabels.get(i);
+                if(bounds.contains(label.x,label.y) && label.value.codePoints().anyMatch(Character::isLetter)) return label.value;
+            }
+            return "فتح";
+        }
+        final class Hit {
+            final RectF r; final Runnable action; final String label;
+            Hit(RectF r,Runnable action){this(r,describeHit(r),action);}
+            Hit(RectF r,String label,Runnable action){this.r=new RectF(r);this.label=label;this.action=action;}
+        }
+
+        private android.graphics.Rect visibleBounds(int index){
+            RectF rect=new RectF(hits.get(index).r);
+            float bottom=screen==Screen.HOME && index<hits.size()-5?contentBottom()-dp(62):getHeight();
+            if(!rect.intersect(0,0,getWidth(),bottom)) return null;
+            android.graphics.Rect result=new android.graphics.Rect();rect.roundOut(result);return result;
+        }
+        private android.view.accessibility.AccessibilityNodeInfo hostNode(){
+            android.view.accessibility.AccessibilityNodeInfo node=android.view.accessibility.AccessibilityNodeInfo.obtain(this);
+            super.onInitializeAccessibilityNodeInfo(node);
+            for(int i=0;i<hits.size();i++) if(visibleBounds(i)!=null) node.addChild(this,i+1);
+            return node;
+        }
+        @Override public android.view.accessibility.AccessibilityNodeProvider getAccessibilityNodeProvider(){
+            return new android.view.accessibility.AccessibilityNodeProvider(){
+                @Override public android.view.accessibility.AccessibilityNodeInfo createAccessibilityNodeInfo(int id){
+                    if(id==HOST_VIEW_ID) return hostNode();
+                    int index=id-1;if(index<0 || index>=hits.size()) return null;
+                    android.graphics.Rect bounds=visibleBounds(index);if(bounds==null) return null;
+                    android.view.accessibility.AccessibilityNodeInfo node=android.view.accessibility.AccessibilityNodeInfo.obtain();
+                    node.setSource(LibraryView.this,id);node.setParent(LibraryView.this);
+                    node.setPackageName(getPackageName());node.setClassName("android.widget.Button");
+                    node.setText(hits.get(index).label);node.setContentDescription(hits.get(index).label);
+                    node.setBoundsInParent(bounds);int[] origin=new int[2];getLocationOnScreen(origin);
+                    bounds.offset(origin[0],origin[1]);node.setBoundsInScreen(bounds);
+                    node.setClickable(true);node.setEnabled(true);node.setFocusable(true);node.setVisibleToUser(true);
+                    node.addAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK);
+                    return node;
+                }
+                @Override public boolean performAction(int id,int action,Bundle args){
+                    int index=id-1;
+                    if(action==android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK && index>=0 && index<hits.size() && visibleBounds(index)!=null){
+                        Runnable click=hits.get(index).action;post(click);return true;
+                    }
+                    if(id==HOST_VIEW_ID) return LibraryView.this.performAccessibilityAction(action,args);
+                    return false;
+                }
+                @Override public List<android.view.accessibility.AccessibilityNodeInfo> findAccessibilityNodeInfosByText(String text,int id){
+                    List<android.view.accessibility.AccessibilityNodeInfo> nodes=new ArrayList<>();
+                    for(int i=0;i<hits.size();i++) if(hits.get(i).label.contains(text)){
+                        android.view.accessibility.AccessibilityNodeInfo node=createAccessibilityNodeInfo(i+1);if(node!=null) nodes.add(node);
+                    }
+                    return nodes;
+                }
+            };
+        }
     }
 }
