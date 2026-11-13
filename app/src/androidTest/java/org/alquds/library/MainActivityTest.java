@@ -123,17 +123,16 @@ public class MainActivityTest {
     private static void captureScreen(String name) {
         android.app.Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         instrumentation.waitForIdleSync();
-        android.graphics.Bitmap bitmap = instrumentation.getUiAutomation().takeScreenshot();
-        assertNotNull("Screenshot unavailable", bitmap);
-        java.io.File directory = new java.io.File(instrumentation.getTargetContext()
-                .getExternalFilesDir(null), "visual-review");
-        assertTrue(directory.isDirectory() || directory.mkdirs());
-        try (java.io.FileOutputStream output = new java.io.FileOutputStream(new java.io.File(directory, name))) {
-            assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, output));
+        // Gradle can uninstall the app after the suite, removing its external files.
+        // Shell-owned captures survive teardown and remain available to adb pull.
+        assertTrue(name.matches("stage11-(light|dark)\\.png"));
+        try (android.os.ParcelFileDescriptor descriptor = instrumentation.getUiAutomation()
+                .executeShellCommand("screencap -p /data/local/tmp/alquds-" + name);
+                java.io.InputStream output = new android.os.ParcelFileDescriptor.AutoCloseInputStream(descriptor)) {
+            byte[] buffer = new byte[1024];
+            while (output.read(buffer) != -1) { /* Wait for screencap to finish. */ }
         } catch (java.io.IOException error) {
             throw new AssertionError(error);
-        } finally {
-            bitmap.recycle();
         }
     }
 
