@@ -9,6 +9,7 @@
         android:icon="@drawable/al_quds_library_icon"
         android:theme="@style/Theme.AlQudsLibrary"
         android:usesCleartextTraffic="false">
+        <activity android:name=".LocalPdfActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

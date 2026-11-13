@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <provider android:name="org.alquds.library.PdfFixtureProvider"
+            android:authorities="org.alquds.library.test.pdf-fixture"
+            android:exported="true" android:grantUriPermissions="true" />
+    </application>
+</manifest>

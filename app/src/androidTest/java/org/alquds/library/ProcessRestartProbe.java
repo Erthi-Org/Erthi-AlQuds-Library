@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class ProcessRestartProbe {
     private Context context() { return InstrumentationRegistry.getInstrumentation().getTargetContext(); }
 
-    @Test public void prepare() {
+    @Test public void prepare() throws Exception {
         SharedPreferences settings = context().getSharedPreferences("library", Context.MODE_PRIVATE);
         SharedPreferences marker = context().getSharedPreferences("process-restart-probe", Context.MODE_PRIVATE);
         assertFalse("Unfinished probe; use a clean test emulator", marker.getBoolean("ready", false));
@@ -35,15 +35,28 @@ public class ProcessRestartProbe {
                 .putBoolean("ready", true).commit());
         assertTrue(settings.edit().putBoolean("dark", true).commit());
         try (CatalogDatabase database = new CatalogDatabase(context())) { database.setFavorite(bookId, true); }
+        try (LocalPdfStore store = new LocalPdfStore(context())) {
+            LocalPdfStore.Document document = store.importPdf(new java.io.ByteArrayInputStream(PdfFixtures.twoPages()), "اختبار استمرار الكتاب.pdf");
+            store.savePage(document.id, 1);
+            assertTrue(marker.edit().putString("pdf", document.id).commit());
+        }
     }
 
-    @Test public void verify() {
+    @Test public void verify() throws Exception {
         SharedPreferences settings = context().getSharedPreferences("library", Context.MODE_PRIVATE);
         SharedPreferences marker = context().getSharedPreferences("process-restart-probe", Context.MODE_PRIVATE);
         assertTrue("Prepare must run in a previous process", marker.getBoolean("ready", false));
         try {
             assertNotEquals("Must use a new Android process", marker.getInt("pid", -1), android.os.Process.myPid());
             assertTrue(settings.getBoolean("dark", false));
+            try (LocalPdfStore store = new LocalPdfStore(context())) {
+                LocalPdfStore.Document document = store.get(marker.getString("pdf", null));
+                assertEquals(2, document.pages); assertEquals(1, document.lastPage);
+                try (android.os.ParcelFileDescriptor descriptor = android.os.ParcelFileDescriptor.open(store.file(document.id), android.os.ParcelFileDescriptor.MODE_READ_ONLY);
+                     android.graphics.pdf.PdfRenderer renderer = new android.graphics.pdf.PdfRenderer(descriptor)) {
+                    assertEquals(2, renderer.getPageCount());
+                }
+            }
             try (CatalogDatabase database = new CatalogDatabase(context())) {
                 assertEquals(marker.getLong("bookId", -1), database.search("", true).get(0).id);
                 assertTrue(database.search("", true).get(0).favorite);
@@ -60,6 +73,7 @@ public class ProcessRestartProbe {
             try (CatalogDatabase database = new CatalogDatabase(context())) {
                 database.setFavorite(marker.getLong("bookId", -1), marker.getBoolean("favorite", false));
             }
+            try (LocalPdfStore store = new LocalPdfStore(context())) { store.delete(marker.getString("pdf", null)); }
             assertTrue(marker.edit().clear().commit());
         }
     }

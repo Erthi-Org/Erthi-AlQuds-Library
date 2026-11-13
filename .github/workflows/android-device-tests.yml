@@ -46,10 +46,12 @@ jobs:
           disable-animations: true
           script: |
             adb shell rm -f /data/local/tmp/alquds-stage11-light.png /data/local/tmp/alquds-stage11-dark.png
+            adb shell rm -f /data/local/tmp/alquds-local-pdf-page.png
             gradle --no-daemon connectedDebugAndroidTest
             mkdir -p visual-review
             adb pull /data/local/tmp/alquds-stage11-light.png visual-review/stage11-light.png
             adb pull /data/local/tmp/alquds-stage11-dark.png visual-review/stage11-dark.png
+            adb pull /data/local/tmp/alquds-local-pdf-page.png visual-review/local-pdf-page.png
             python3 tests/run_process_restart.py
       - name: Upload visual review
         uses: actions/upload-artifact@v4

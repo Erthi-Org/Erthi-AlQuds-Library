@@ -149,6 +149,10 @@ public final class MainActivity extends Activity {
             buildScreen(search.getText().toString());
         });
         content.addView(theme);
+        Button localBooks = button("كتبي وقراءة PDF");
+        icon(localBooks, R.drawable.ic_books, 32);
+        localBooks.setOnClickListener(v -> startActivity(new android.content.Intent(this, LocalPdfActivity.class)));
+        content.addView(localBooks);
         TextView label = text("ابحث في الفهرس", 18, foreground);
         content.addView(label);
         search = new EditText(this);
