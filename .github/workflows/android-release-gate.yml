@@ -43,7 +43,7 @@ jobs:
           test -f app/src/main/java/org/alquds/library/MainActivity.java
           grep -q 'android.permission.INTERNET' app/src/main/AndroidManifest.xml
       - name: Build and unit test
-        run: gradle --no-daemon clean testDebugUnitTest assembleDebug
+        run: gradle --no-daemon clean testDebugUnitTest assembleDebug assembleDebugAndroidTest
       - name: Run lint
         run: gradle --no-daemon lintDebug
       - name: Generate APK checksum

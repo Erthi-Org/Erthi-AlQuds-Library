@@ -8,7 +8,8 @@ import java.io.IOException;
 
 final class PdfFixtures {
     static byte[] twoPages() throws IOException {
-        try (PdfDocument document = new PdfDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+        PdfDocument document = new PdfDocument();
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             for (int index = 0; index < 2; index++) {
                 PdfDocument.Page page = document.startPage(new PdfDocument.PageInfo.Builder(400, 600, index + 1).create());
                 page.getCanvas().drawColor(Color.WHITE);
@@ -18,6 +19,6 @@ final class PdfFixtures {
             }
             document.writeTo(output);
             return output.toByteArray();
-        }
+        } finally { document.close(); }
     }
 }
