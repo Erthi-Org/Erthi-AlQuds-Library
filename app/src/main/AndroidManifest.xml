@@ -6,12 +6,13 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:label="@string/app_name"
-        android:icon="@drawable/al_quds_library_icon"
+        android:icon="@drawable/heritage_emblem"
         android:theme="@style/Theme.AlQudsLibrary"
         android:usesCleartextTraffic="false">
         <activity android:name=".LocalPdfActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".HeritageHomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

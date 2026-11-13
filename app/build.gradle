@@ -10,8 +10,8 @@ android {
         applicationId 'org.alquds.library'
         minSdk 24
         targetSdk 35
-        versionCode 18
-        versionName '1.6.0'
+        versionCode 19
+        versionName '1.6.1'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         // The two process probes must run separately with a force-stop between them.
         testInstrumentationRunnerArguments notClass: 'org.alquds.library.ProcessRestartProbe'
