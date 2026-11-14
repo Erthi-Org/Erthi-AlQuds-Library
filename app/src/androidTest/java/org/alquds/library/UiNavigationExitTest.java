@@ -21,11 +21,17 @@ import static org.junit.Assert.*;
 public class UiNavigationExitTest {
     private final Instrumentation instrumentation=InstrumentationRegistry.getInstrumentation();
 
-    @Test public void tabsCategoryBackAndLibraryDestinationsRemainUsableWithoutHomeSearch() throws Exception {
+    @Test public void homeSearchFiltersTabsAndLibraryDestinationsRemainUsable() throws Exception {
         try(ActivityScenario<HeritageHomeActivity> scenario=ActivityScenario.launch(HeritageHomeActivity.class)) {
             screen(scenario,"مكتبة القدس الجديدة");
-            AccessibilityNodeInfo root=instrumentation.getUiAutomation().getRootInActiveWindow();
-            assertTrue(root.findAccessibilityNodeInfosByText("ابحث عن كتاب، مؤلف، موضوع").isEmpty());
+            click("البحث في المكتبة");
+            windowText("بحث مكتبة القدس الجديدة");
+            click("إلغاء");
+            screen(scenario,"مكتبة القدس الجديدة");
+            click("تصفية النتائج");
+            screen(scenario,"تصفية النتائج");
+            instrumentation.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+            screen(scenario,"مكتبة القدس الجديدة");
             click("المفضلة");screen(scenario,"المفضلة");capture("favorites");
             click("المصادر");screen(scenario,"المصادر");capture("sources");
             click("المرصد");screen(scenario,"مرصد التراث");capture("discover");

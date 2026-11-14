@@ -1,16 +1,10 @@
 package org.alquds.library;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.RippleDrawable;
-import android.content.res.ColorStateList;
 import android.view.Gravity;
-import android.view.ContextThemeWrapper;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -39,13 +33,13 @@ public final class MainActivity extends Activity {
     private EditText search;
     private boolean dark, favoritesOnly;
     private int generation;
-    private int foreground, background, muted, surface, outline;
+    private int foreground, muted;
     private Runnable pendingSearch;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         preferences = getSharedPreferences("library", MODE_PRIVATE);
-        dark = preferences.getBoolean("dark", false);
+        dark = HeritagePalette.isDark(this);
         database = ((LibraryApplication) getApplication()).openCatalog();
         String query = state == null ? "" : state.getString("query", "");
         favoritesOnly = state != null && state.getBoolean("favorites");
@@ -74,7 +68,7 @@ public final class MainActivity extends Activity {
         view.setAllCaps(false);
         view.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         view.setPadding(dp(16), dp(12), dp(16), dp(12));
-        view.setBackground(new AndalusianFrame(dark,getResources().getDisplayMetrics().density));
+        view.setBackground(HeritagePalette.button(dark, getResources().getDisplayMetrics().density));
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(-1, -2);
         layout.setMargins(0, dp(4), 0, dp(8));
         view.setLayoutParams(layout);
@@ -90,15 +84,14 @@ public final class MainActivity extends Activity {
     }
 
     private void buildScreen(String query) {
-        foreground = Color.parseColor(dark ? "#F4F0E6" : "#102E35");
-        background = Color.parseColor(dark ? "#10232A" : "#FAF7F0");
-        muted = Color.parseColor(dark ? "#D3CBB8" : "#4B5D5F");
-        surface = Color.parseColor(dark ? "#19353D" : "#FFFFFF");
-        outline = Color.parseColor(dark ? "#4B686B" : "#CCD9D3");
+        foreground = dark ? HeritagePalette.IVORY : HeritagePalette.INK;
+        muted = dark ? HeritagePalette.MUTED : HeritagePalette.PAPER_MUTED;
+        getWindow().setStatusBarColor(HeritagePalette.DEEP);
+        getWindow().setNavigationBarColor(HeritagePalette.DEEP);
         root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        root.setBackgroundColor(background);
+        root.setBackground(HeritagePalette.backdrop(this, dark));
         root.setPadding(dp(20), dp(20), dp(20), dp(20));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
             if (android.os.Build.VERSION.SDK_INT >= 30) {
@@ -128,7 +121,7 @@ public final class MainActivity extends Activity {
         emblem.setScaleType(ImageView.ScaleType.FIT_CENTER);
         emblem.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         identity.addView(emblem, new LinearLayout.LayoutParams(dp(64), dp(64)));
-        TextView title = text(getString(R.string.app_name), 26, foreground);
+        TextView title = text(getString(R.string.app_name), 26, dark ? HeritagePalette.GILT : HeritagePalette.INK);
         title.setTypeface(null, Typeface.BOLD);
         title.setPadding(dp(12), dp(8), dp(12), dp(8));
         if (android.os.Build.VERSION.SDK_INT >= 28) title.setAccessibilityHeading(true);
@@ -155,8 +148,7 @@ public final class MainActivity extends Activity {
         search.setId(View.generateViewId());
         label.setLabelFor(search.getId());
         search.setHint("عنوان، مؤلف، أو تصنيف");
-        search.setTextColor(foreground);
-        search.setHintTextColor(muted);
+        HeritagePalette.styleInput(search, dark);
         search.setSingleLine(true);
         search.setMinHeight(dp(48));
         search.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
@@ -237,9 +229,7 @@ public final class MainActivity extends Activity {
 
     private void showBook(Book book) {
         boolean favorite = book.favorite;
-        ContextThemeWrapper dialogTheme = new ContextThemeWrapper(this, dark
-                ? android.R.style.Theme_Material_Dialog_Alert : android.R.style.Theme_Material_Light_Dialog_Alert);
-        new AndalusianDialog(dialogTheme).setTitle(book.title)
+        new AndalusianDialog(this).setTitle(book.title)
                 .setIcon(book.favorite ? R.drawable.ic_favorite : R.drawable.ic_books)
                 .setMessage(book.author + "\n" + book.category + "\n\n" + book.description
                         + "\n\nالإتاحة: بيانات وصفية فقط، لا يوجد ملف للقراءة.")

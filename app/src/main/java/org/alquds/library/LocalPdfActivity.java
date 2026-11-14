@@ -40,13 +40,12 @@ public final class LocalPdfActivity extends Activity {
     private String documentId;
     private int page, pages, generation;
     private boolean busy, dark;
-    private int ink, background;
+    private int ink;
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        dark = getSharedPreferences("library", MODE_PRIVATE).getBoolean("dark", false);
-        ink = Color.parseColor(dark ? "#F4F0E6" : "#102E35");
-        background = Color.parseColor(dark ? "#0A0A0A" : "#FAF7F0");
+        dark = HeritagePalette.isDark(this);
+        ink = dark ? HeritagePalette.IVORY : HeritagePalette.INK;
         store = new LocalPdfStore(this);
         documentId = state == null ? null : state.getString("document");
         if (documentId == null) showShelf(""); else open(documentId, state.getInt("page", 0));
@@ -66,7 +65,7 @@ public final class LocalPdfActivity extends Activity {
         button.setText(label); button.setAllCaps(false); button.setMinHeight(dp(52));
         button.setTextColor(ink); button.setPadding(dp(16),dp(10),dp(16),dp(10));
         UiIcons.apply(button,UiIcons.label(label));
-        button.setBackground(new AndalusianFrame(dark,getResources().getDisplayMetrics().density));
+        button.setBackground(HeritagePalette.button(dark, getResources().getDisplayMetrics().density));
         button.setOnClickListener(view -> { if (!busy) action.run(); });
         LinearLayout.LayoutParams layout=new LinearLayout.LayoutParams(-1,-2);
         layout.setMargins(0,dp(4),0,dp(5));content.addView(button,layout);
@@ -79,7 +78,7 @@ public final class LocalPdfActivity extends Activity {
         image = null;
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL); root.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        root.setBackgroundColor(background);
+        root.setBackground(HeritagePalette.backdrop(this, dark));
         root.setPadding(dp(16),dp(12),dp(16),dp(12));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
             if (android.os.Build.VERSION.SDK_INT >= 30) {
@@ -96,6 +95,7 @@ public final class LocalPdfActivity extends Activity {
         scroll.addView(content); root.addView(scroll, new LinearLayout.LayoutParams(-1, -1));
         setContentView(root); root.requestApplyInsets();
         TextView heading = text(title, 24);
+        heading.setTextColor(dark ? HeritagePalette.GILT : HeritagePalette.INK);
         if (android.os.Build.VERSION.SDK_INT >= 28) heading.setAccessibilityHeading(true);
         content.addView(heading);
         status = text("", 16); status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
@@ -224,6 +224,7 @@ public final class LocalPdfActivity extends Activity {
     private void jump() {
         EditText input = new EditText(this);
         input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        HeritagePalette.styleInput(input, dark);
         input.setHint("من 1 إلى " + pages);
         input.setContentDescription("رقم الصفحة");
         new AndalusianDialog(this).setTitle("انتقل إلى صفحة").setView(input)
