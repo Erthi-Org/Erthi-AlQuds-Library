@@ -21,12 +21,18 @@ import static org.junit.Assert.*;
 public class UiNavigationExitTest {
     private final Instrumentation instrumentation=InstrumentationRegistry.getInstrumentation();
 
-    @Test public void homeSearchFiltersTabsAndLibraryDestinationsRemainUsable() throws Exception {
-        try(ActivityScenario<HeritageHomeActivity> scenario=ActivityScenario.launch(HeritageHomeActivity.class)) {
+    @Test public void homeSearchOpensAndCancels() {
+        try (ActivityScenario<HeritageHomeActivity> scenario = ActivityScenario.launch(HeritageHomeActivity.class)) {
             screen(scenario,"مكتبة القدس الجديدة");
             click("البحث في المكتبة");
             windowText("بحث مكتبة القدس الجديدة");
             click("إلغاء");
+            windowText("البحث في المكتبة");
+        }
+    }
+
+    @Test public void homeFiltersTabsAndLibraryDestinationsRemainUsable() throws Exception {
+        try(ActivityScenario<HeritageHomeActivity> scenario=ActivityScenario.launch(HeritageHomeActivity.class)) {
             screen(scenario,"مكتبة القدس الجديدة");
             click("تصفية النتائج");
             screen(scenario,"تصفية النتائج");

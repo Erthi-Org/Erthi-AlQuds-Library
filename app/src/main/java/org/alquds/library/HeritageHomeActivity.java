@@ -113,7 +113,7 @@ public class HeritageHomeActivity extends Activity {
         int horizontal = Math.round(libraryView.dp(20));
         int vertical = Math.round(libraryView.dp(12));
         input.setPadding(horizontal, vertical, horizontal, vertical);
-        new AndalusianDialog(this)
+        AlertDialog searchDialog = new AndalusianDialog(this)
                 .setTitle("بحث مكتبة القدس الجديدة")
                 .setView(input)
                 .setPositiveButton("بحث", (dialog, which) -> {
@@ -126,7 +126,15 @@ public class HeritageHomeActivity extends Activity {
                     libraryView.fetchUnifiedSources(q);
                 })
                 .setNegativeButton("إلغاء", null)
-                .show();
+                .create();
+        searchDialog.setOnDismissListener(dialog -> libraryView.post(() -> {
+            if (!isFinishing()) {
+                libraryView.invalidate();
+                libraryView.sendAccessibilityEvent(
+                        android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED);
+            }
+        }));
+        searchDialog.show();
     }
 
     private void showSurahDialog(QuranReciter reciter) {
