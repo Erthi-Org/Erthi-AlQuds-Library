@@ -1,0 +1,182 @@
+{
+  "repository": "https://github.com/microsoft/fluentui-emoji",
+  "commit": "1ffb34c752ecf5d402f04cfb4b392c77f57c54bc",
+  "license": "MIT",
+  "assets": [
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_books.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Books/3D/books_3d.png",
+      "sha256": "36f75eaa1e1a849fc950f43962b447c206d96244858468240a6a81beaa97f7be"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_search.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Magnifying%20glass%20tilted%20left/3D/magnifying_glass_tilted_left_3d.png",
+      "sha256": "e8fea91e4652a36486aa9392a67873c987a13389afdae06bbcdae78ab30b4f4f"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_favorite.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Star/3D/star_3d.png",
+      "sha256": "b935cdf502b69054bc2b08e7ba4e4eaba6499564a2041dd77d6291e21bf8cfe8"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_moon.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Crescent%20moon/3D/crescent_moon_3d.png",
+      "sha256": "0a5b5192390983789d430e37582dfda343be19bf8246feda73108484771ba09d"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_sun.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sun/3D/sun_3d.png",
+      "sha256": "c9bb15d03d4b1e6151d97e12119ac93bbd2bcb5e713a49c1fcfc11ece54caec1"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_home.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/House/3D/house_3d.png",
+      "sha256": "0279b073321551b55c86a10dc2fff5bf66c8dec895672004da43482c5a1de87c"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_quran.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Open%20book/3D/open_book_3d.png",
+      "sha256": "c6b7de9724d8ca47f900238d8cb34c2ac7346a12c8cea91c176b30f8a39d628d"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_hadith.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Scroll/3D/scroll_3d.png",
+      "sha256": "b977018478e81cfe8f05e46753c8c053f4380e58f0d548c27e212928c84bd27c"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_law.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Balance%20scale/3D/balance_scale_3d.png",
+      "sha256": "442cfa3f13a9052484475e388e021f248fc39d20a8a7f36b30ea70adcad0d217"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_people.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Busts%20in%20silhouette/3D/busts_in_silhouette_3d.png",
+      "sha256": "1169de2f4d600067bc3a135d584cbbfc38ef5212148089dcaff7dedb0dc3d805"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_language.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Feather/3D/feather_3d.png",
+      "sha256": "44a0b99188849335acb97e852cc0983758ebcd32dd7ad2689e461248e9c302da"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_history.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Classical%20building/3D/classical_building_3d.png",
+      "sha256": "b2a54a07b3f3bed1766254a37afd44f2237a3e5e76f88275215135cea994f8c3"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_science.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Microscope/3D/microscope_3d.png",
+      "sha256": "cc4a8810c02f7cadd4687434d651733dded62579d5a9fadfda6163793ffcb913"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_geography.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/World%20map/3D/world_map_3d.png",
+      "sha256": "f170580a2a2f70662e1de8c76d8263c33202f66f4002e57ad89c997a1b3dc488"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_sources.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Globe%20showing%20europe-africa/3D/globe_showing_europe-africa_3d.png",
+      "sha256": "a69baec3cc48ed5206d171f5f494e3ab06665277ec4a3acc7e6bf3962ee460ad"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_compass.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Compass/3D/compass_3d.png",
+      "sha256": "146e39368bbeb95049ca200ba6fca3ded48f0883bc042230d9fa1939b6aec2e7"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_menu.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Card%20index%20dividers/3D/card_index_dividers_3d.png",
+      "sha256": "a995ccc3acb244234587675ffab838abc50fab89b5b2170922dc47e8eed91433"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_exit.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Door/3D/door_3d.png",
+      "sha256": "4c00d6d74d289a4e8689087eb809ab724bcde422b12a800e23a926dff2a657c8"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_back.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Left%20arrow/3D/left_arrow_3d.png",
+      "sha256": "67a377760bb0dbc7b4a25fe5298125c59a11c43167d21052cb3d64c6701badd4"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_next.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Right%20arrow/3D/right_arrow_3d.png",
+      "sha256": "499ad6a8d1327d60c756134fff21fc879cebd43e478a1b1d99fc07e83adca2d6"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_play.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Play%20button/3D/play_button_3d.png",
+      "sha256": "0731d5e1ba56a3929bcd05526af88faa504440127e5f0d1d2956ebf7d2e4a114"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_pause.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Pause%20button/3D/pause_button_3d.png",
+      "sha256": "628ce66757a7567a3f16ff54793b83e06f4a34c56b9eba76b5d24dee2e9c2edc"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_checked.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Check%20mark%20button/3D/check_mark_button_3d.png",
+      "sha256": "256e3dd950cf1705ab72511ab242472b4bd7db519aa402a6182c1aaf8c58def9"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_unchecked.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/White%20square%20button/3D/white_square_button_3d.png",
+      "sha256": "c5313c1c8fd4d17b1c83efb924f03dda42965d5577d502e348d8b3dd44f9948b"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_filter.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Control%20knobs/3D/control_knobs_3d.png",
+      "sha256": "2365d422c70108fcf0c4529ea3a958946b134c9605974bd21cefa1c25e16b1a0"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_folder.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/File%20folder/3D/file_folder_3d.png",
+      "sha256": "d07ff91df2a4ad9f08e281e9b99ad66924b6db0c0afd2a938feca4dd6b7a9039"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_delete.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Wastebasket/3D/wastebasket_3d.png",
+      "sha256": "3aa2d93f1d14e504675da7952e3d10114036004f458d617f5f46b744235b328c"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_save.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Floppy%20disk/3D/floppy_disk_3d.png",
+      "sha256": "6c0bf4706265b25d742ce2159e68e191036760765c2f7361dc1898d19836e8ab"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_bookmark.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bookmark/3D/bookmark_3d.png",
+      "sha256": "23e7f305882c70e9bc875a4bdb3bf456aae0a84e40e3b2541551fc832268ec2c"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_share.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Outbox%20tray/3D/outbox_tray_3d.png",
+      "sha256": "db74a311c7059ddad64a9680ead1b69ac3a9a77ca00448cd0445b67470bd849d"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_refresh.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Counterclockwise%20arrows%20button/3D/counterclockwise_arrows_button_3d.png",
+      "sha256": "f43c7b042dfef8a3a288e9ee54119caaca68f3b3a85493bfaf53abfa436d471c"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_info.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Information/3D/information_3d.png",
+      "sha256": "b3924702264b5959989cc1a8ab011c23748b682af85c566132e3d6b120c9b2b0"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_close.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Cross%20mark/3D/cross_mark_3d.png",
+      "sha256": "2753b89dcd790c7f25fa3c5fd5641821860257364163abd87a2f57bb268466b9"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_headphones.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Headphone/3D/headphone_3d.png",
+      "sha256": "e7c26d433340b1706f20c733558da412cbf70b1a95048d51a80eb0ed2c0a02c9"
+    },
+    {
+      "file": "app/src/main/res/drawable-nodpi/ic_ui_page.png",
+      "url": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Page%20facing%20up/3D/page_facing_up_3d.png",
+      "sha256": "f212d11ed09cfef2ca9cfd3b6b35b29ad7a57eb677aa6611fe284763303a1c57"
+    }
+  ]
+}
