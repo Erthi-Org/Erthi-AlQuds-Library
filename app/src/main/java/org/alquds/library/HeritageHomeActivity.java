@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -125,8 +127,15 @@ public class HeritageHomeActivity extends Activity {
                     libraryView.resultsPage = 0;
                     libraryView.fetchUnifiedSources(q);
                 })
-                .setNegativeButton("إلغاء", null)
+                .setNegativeButton("إلغاء", (dialog, which) -> {
+                    InputMethodManager keyboard = getSystemService(InputMethodManager.class);
+                    if (keyboard != null) keyboard.hideSoftInputFromWindow(input.getWindowToken(), 0);
+                })
                 .create();
+        Window searchWindow = searchDialog.getWindow();
+        if (searchWindow != null) {
+            searchWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        }
         searchDialog.setOnDismissListener(dialog -> libraryView.post(() -> {
             if (!isFinishing()) {
                 libraryView.invalidate();
